@@ -2,14 +2,16 @@ package terraxcel
 
 import (
 	"context"
-	"go/types"
 	"os"
 
 	"github.com/Deathfireofdoom/terraxcel-client/client"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
@@ -112,4 +114,12 @@ func (p *terraxcelProvider) Configure(ctx context.Context, req provider.Configur
 	// make client available for resources that needs it
 	resp.DataSourceData = client
 	resp.ResourceData = client
+}
+
+func (p *terraxcelProvider) DataSources(_ context.Context) []func() datasource.DataSource {
+	return []func() datasource.DataSource{}
+}
+
+func (p terraxcelProvider) Resources(_ context.Context) []func() resource.Resource {
+	return []func() resource.Resource{}
 }
