@@ -13,8 +13,8 @@ import (
 )
 
 var (
-	_ resource.Resource              = &workbookResource
-	_ resource.ResourceWithConfigure = &workbookResource
+	_ resource.Resource              = &workbookResource{}
+	_ resource.ResourceWithConfigure = &workbookResource{}
 )
 
 func NewWorkbookResource() resource.Resource {
