@@ -7,6 +7,7 @@ import (
 
 	"github.com/Deathfireofdoom/excel-client-go/pkg/models"
 	"github.com/Deathfireofdoom/terraxcel-client/client"
+
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -135,7 +136,15 @@ func (r *workbookResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
-	err := r.client.DeleteWorkbook(state.ID.ValueString())
+	// create workbook from state
+	workbook := &models.Workbook{
+		ID:         state.ID.ValueString(),
+		FileName:   state.FileName.ValueString(),
+		Extension:  models.Extension(state.Extension.ValueString()),
+		FolderPath: state.FolderPath.ValueString(),
+	}
+
+	err := r.client.DeleteWorkbook(*workbook)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"could not delete workbook",

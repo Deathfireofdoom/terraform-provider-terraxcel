@@ -20,7 +20,7 @@ var (
 	_ provider.Provider = &terraxcelProvider{}
 )
 
-func NewProvider() provider.Provider {
+func New() provider.Provider {
 	return &terraxcelProvider{}
 }
 
@@ -33,17 +33,17 @@ type terraxcelProviderModel struct {
 }
 
 func (p *terraxcelProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "terraXcel"
+	resp.TypeName = "terraxcel"
 }
 
 func (p *terraxcelProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"host": schema.StringAttribute{
-				Optional: false,
+				Optional: true,
 			},
 			"token": schema.StringAttribute{
-				Optional:  false,
+				Optional:  true,
 				Sensitive: true,
 			},
 		},
@@ -117,9 +117,13 @@ func (p *terraxcelProvider) Configure(ctx context.Context, req provider.Configur
 }
 
 func (p *terraxcelProvider) DataSources(_ context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		NewExtensionsDataSource,
+	}
 }
 
-func (p terraxcelProvider) Resources(_ context.Context) []func() resource.Resource {
-	return []func() resource.Resource{}
+func (p *terraxcelProvider) Resources(_ context.Context) []func() resource.Resource {
+	return []func() resource.Resource{
+		NewWorkbookResource,
+	}
 }

@@ -52,7 +52,14 @@ func (d *extensionsDataSource) Schema(_ context.Context, req datasource.SchemaRe
 func (d *extensionsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state extensionsDataSourceModel
 
-	extensions := d.client.GetExtensions()
+	extensions, err := d.client.ReadExtensions()
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Unable to read extensions",
+			"Unabled to read extensions: %w",
+		)
+		return
+	}
 
 	// maps response from client to state
 	for _, extension := range extensions {
